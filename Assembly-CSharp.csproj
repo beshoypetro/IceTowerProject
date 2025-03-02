@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Assets\scripts\cameraMove.cs" />
     <Compile Include="Assets\scripts\PlayerMovement.cs" />
+    <Compile Include="Assets\scripts\ObjectPool.cs" />
     <Compile Include="Assets\scripts\jump.cs" />
     <Compile Include="Assets\scripts\PlatformSpawner.cs" />
     <Compile Include="Assets\scripts\groundFall.cs" />
