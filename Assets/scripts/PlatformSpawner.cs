@@ -1,98 +1,206 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlatformSpawner : MonoBehaviour
 {
-    public GameObject platformPrefab; // Platform prefab to instantiate
-    public GameObject leftWallPrefab; // Left wall prefab to instantiate
-    public GameObject rightWallPrefab; // Right wall prefab to instantiate
-    public Transform player; // Reference to the player
-    public float platformDistance = 4f; // Distance between platforms
-    public int initialPlatforms = 8; // Number of initial platforms to generate
-    public float centerY; // The center Y position of the game
-    public float wallLeftX = -14.3f; // Left wall X position
-    public float wallRightX = 14.3f; // Right wall X position
-    public float wallSegmentHeight = 14f; // Height of each wall segment
+    public GameObject platformPrefab;
+    public GameObject leftWallPrefab;
+    public GameObject rightWallPrefab;
+    public Transform player;
+    public float platformDistance = 4f;
+    public int initialPlatforms = 8;
+    public float centerY;
+    public float wallLeftX = -14.4f;
+    public float wallRightX = 14.4f;
+    public float wallSegmentHeight = 16f;
+    public ObjectPool pool;
+    public int maxPlatforms = 20;
 
-    private float nextPlatformSpawnY; // Y coordinate for the next platform spawn
-    private float nextWallSpawnY; // Y coordinate for the next wall spawn
-    private bool hasReachedCenter = false; // Flag to check if player has reached the center
-    private float lastXPosition; // Last X position of the spawned platform
+    private float nextPlatformSpawnY;
+    private float nextWallSpawnY;
+    private bool hasReachedCenter = false;
+    private float lastXPosition;
+    private int currentPlatformCount = 0;
 
     void Start()
     {
-        //nextPlatformSpawnY = 0f ; // Initialize platform spawn position at the top edge of the camera
-        nextWallSpawnY = wallSegmentHeight; // Initialize wall spawn position at the top edge of the camera
-        PreGeneratePlatforms(); // Generate initial platforms
-        SpawnWallSegments(); // Spawn initial walls
+        pool = FindObjectOfType<ObjectPool>();
+
+        if (pool == null)
+        {
+            Debug.LogError("ObjectPool component not found in the scene.");
+            return;
+        }
+
+        nextWallSpawnY = wallSegmentHeight;
+        nextPlatformSpawnY = centerY - platformDistance;
+        Debug.Log("Initial nextPlatformSpawnY: " + nextPlatformSpawnY);
+
+        PreGeneratePlatforms();
+        SpawnWallSegments();
     }
 
     void Update()
     {
-        // Check if the player has reached the center of the game
         if (!hasReachedCenter && player.position.y >= centerY)
         {
-            hasReachedCenter = true; // Set the flag to start spawning platforms and walls
+            hasReachedCenter = true;
         }
 
-        // Check if the player has reached the spawn height and has reached the center
-        if (hasReachedCenter && player.position.y >= nextPlatformSpawnY - Camera.main.orthographicSize)
+        // Spawn platforms when the player is near the next platform spawn position
+    if (hasReachedCenter && player.position.y >= nextPlatformSpawnY - Camera.main.orthographicSize)
+    {
+        for (int i = 0; i < 3; i++)
         {
-            SpawnPlatform(); // Spawn a new platform
+            SpawnPlatform();
+        }
+    }
+
+        // Spawn walls when the player is near the next wall spawn position
+        if (player.position.y >= nextWallSpawnY - Camera.main.orthographicSize - 3)
+        {
+
+
+                Debug.Log("player" + player.position.y + "  next wall " + nextWallSpawnY + "  camera   " + Camera.main.orthographicSize);
+                SpawnWallSegments();
         }
 
-        // Check if the player has reached the wall spawn height
-        if (player.position.y >= nextWallSpawnY - wallSegmentHeight)
-        {
-            SpawnWallSegments(); // Spawn new wall segments
-            SpawnWallSegments(); // Spawn another set of wall segments
-        }
+        RecyclePlatforms();
+        RecycleWalls(); // Ensure walls are also recycled in the update loop.
     }
 
     void PreGeneratePlatforms()
     {
-        // Generate platforms below the center
-        nextPlatformSpawnY = centerY - (platformDistance * 1); // Adjust to start below center
-        for (int i = 0; i < initialPlatforms / 2; i++)
+        for (int i = 0; i < initialPlatforms; i++)
         {
             SpawnPlatform();
-        }
-        // Generate platforms above the center
-        nextPlatformSpawnY = centerY + platformDistance; // Adjust to start above center
-        for (int i = 0; i < initialPlatforms / 2; i++)
-        {
-            SpawnPlatform();
+            SpawnWallSegments();
         }
     }
 
     void SpawnPlatform()
     {
-        float x;
-        float minXDistance = 4f; // Minimum horizontal distance from the last platform
-        float maxXDistance = 9f; // Maximum horizontal distance from the last platform
-
-        // Ensure the new platform is within the specified range and not far from the last one
-        do
+        if (currentPlatformCount >= maxPlatforms)
         {
-            // Random X position within walls
-            x = Random.Range((float)(wallLeftX - 3.78), (float)(wallRightX + 3.78));
-        } while (Mathf.Abs(x - lastXPosition) < minXDistance || Mathf.Abs(x - lastXPosition) > maxXDistance);
+            return;
+        }
 
-        Vector3 spawnPosition = new Vector3(x, nextPlatformSpawnY, 0f);
-        Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
-        nextPlatformSpawnY += platformDistance; // Increment next spawn position by fixed distance
-        lastXPosition = x; // Update the last X position
+        float x;
+        const float wallOffset = 3.78f;
+
+        x = Random.Range(wallLeftX - wallOffset, wallRightX + wallOffset);
+        lastXPosition = x;
+        Vector3 spawnPosition;
+        if (player.position.y >= centerY + 10f) // Example condition, you can adjust the threshold as needed
+        {
+            spawnPosition = new Vector3(x, player.position.y + Camera.main.orthographicSize + platformDistance, 0f);
+        }
+        else
+        {
+            spawnPosition = new Vector3(x, nextPlatformSpawnY, 0f);
+        }
+
+        GameObject platform = pool.GetPooledObject("Platform");
+        if (platform != null)
+        {
+            platform.transform.position = spawnPosition;
+            platform.SetActive(true);
+            Debug.Log("Platform spawned at: " + spawnPosition);
+
+            nextPlatformSpawnY += platformDistance;
+            currentPlatformCount++;
+            Debug.Log("Next platform Y after increment: " + nextPlatformSpawnY + " (Count: " + currentPlatformCount + ")");
+        }
+        else
+        {
+            Debug.LogWarning("No inactive Platform objects available in the pool.");
+            return;
+        }
     }
 
-        void SpawnWallSegments()
+    void SpawnWallSegments()
     {
-        // Spawn left wall segment at the correct horizontal position
-        Vector3 leftWallPosition = new Vector3(wallLeftX, nextWallSpawnY, 0f);
-        Instantiate(leftWallPrefab, leftWallPosition, Quaternion.Euler(0, 0, 90)); // Applying 90-degree rotation
 
-        // Spawn right wall segment at the correct horizontal position
-        Vector3 rightWallPosition = new Vector3(wallRightX, nextWallSpawnY, 0f);
-        Instantiate(rightWallPrefab, rightWallPosition, Quaternion.Euler(0, 0, 90)); // Applying 90-degree rotation
+        if (pool == null)
+        {
+            Debug.LogError("ObjectPool component not assigned.");
+            return;
+        }
 
-        nextWallSpawnY += wallSegmentHeight; // Increment next wall spawn position by wall segment height
+        Vector3 leftWallPosition = new Vector3(wallLeftX, nextWallSpawnY, 3.5f);
+        GameObject leftWall = pool.GetPooledObject("LeftWall");
+        if (leftWall != null)
+        {
+            leftWall.transform.position = leftWallPosition;
+            leftWall.SetActive(true);
+            //nextWallSpawnY += wallSegmentHeight / 2;
+            Debug.LogWarning("left checking walls  " + nextWallSpawnY);
+        }
+        else
+        {
+            Debug.LogWarning("No inactive LeftWall objects available in the pool.");
+        }
+
+        Vector3 rightWallPosition = new Vector3(wallRightX, nextWallSpawnY, 3.5f);
+        GameObject rightWall = pool.GetPooledObject("RightWall");
+        if (rightWall != null)
+        {
+            rightWall.transform.position = rightWallPosition;
+            rightWall.SetActive(true);
+            nextWallSpawnY += (wallSegmentHeight) ;
+            Debug.LogWarning("right  " + nextWallSpawnY);
+        }
+        else
+        {
+            Debug.LogWarning("No inactive RightWall objects available in the pool.");
+        }
+
+
     }
+
+    void RecyclePlatforms()
+    {
+        foreach (GameObject platform in pool.GetPooledObjects("Platform"))
+        {
+            if (platform.activeInHierarchy && platform.transform.position.y < player.position.y - Camera.main.orthographicSize * 2)
+            {
+                platform.SetActive(false);
+                currentPlatformCount--;
+            }
+        }
+    }
+
+    void RecycleWalls()
+    {
+        float spawnYAbovePlayer = player.position.y + Camera.main.orthographicSize * 2;
+
+
+        foreach (GameObject leftWall in pool.GetPooledObjects("LeftWall"))
+        {
+            Debug.Log("Left wall recycled and spawned at: " + spawnYAbovePlayer + "  " + Camera.main.orthographicSize + "   " + (player.position.y - Camera.main.orthographicSize * 2) + "  " + leftWall.transform.position.y);
+
+            if (leftWall.activeInHierarchy && leftWall.transform.position.y < player.position.y - Camera.main.orthographicSize -3 )
+            {
+                leftWall.SetActive(false);
+                Vector3 spawnPosition = new Vector3(leftWall.transform.position.x, spawnYAbovePlayer+4, leftWall.transform.position.z);
+                leftWall.transform.position = spawnPosition;
+                leftWall.SetActive(true);
+                Debug.Log("Left wall recycled and spawned at: " + spawnPosition);
+            }
+        }
+
+        foreach (GameObject rightWall in pool.GetPooledObjects("RightWall"))
+        {
+            if (rightWall.activeInHierarchy && rightWall.transform.position.y < player.position.y - Camera.main.orthographicSize -3 )
+            {
+                rightWall.SetActive(false);
+                Vector3 spawnPosition = new Vector3(rightWall.transform.position.x, spawnYAbovePlayer+4, rightWall.transform.position.z);
+                rightWall.transform.position = spawnPosition;
+                rightWall.SetActive(true);
+                Debug.Log("Right wall recycled and spawned at: " + spawnPosition);
+            }
+        }
+    }
+
+
+
 }

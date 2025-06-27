@@ -3,7 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\beshoy\\My project (1)\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|c:\\users\\beshoy\\my project (1)\\assets\\scripts\\cameramove.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|c:\\users\\beshoy\\my project (1)\\assets\\scripts\\platformspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\platformspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|C:\\Users\\beshoy\\My project (1)\\assets\\scripts\\objectpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\objectpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|C:\\Users\\beshoy\\My project (1)\\assets\\scripts\\cameramove.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\cameramove.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -25,25 +33,46 @@
           "SelectedChildIndex": 1,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ObjectPool.cs",
+              "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\ObjectPool.cs",
+              "RelativeDocumentMoniker": "Assets\\scripts\\ObjectPool.cs",
+              "ToolTip": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\ObjectPool.cs",
+              "RelativeToolTip": "Assets\\scripts\\ObjectPool.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAowAMAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-01T14:27:21.93Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "PlatformSpawner.cs",
+              "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\PlatformSpawner.cs",
+              "RelativeDocumentMoniker": "Assets\\scripts\\PlatformSpawner.cs",
+              "ToolTip": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\PlatformSpawner.cs",
+              "RelativeToolTip": "Assets\\scripts\\PlatformSpawner.cs",
+              "ViewState": "AgIAAKgAAAAAAAAAAAAmwL4AAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-01T01:28:53.015Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "cameraMove.cs",
               "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\cameraMove.cs",
               "RelativeDocumentMoniker": "Assets\\scripts\\cameraMove.cs",
               "ToolTip": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\cameraMove.cs",
               "RelativeToolTip": "Assets\\scripts\\cameraMove.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAQwBQAAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-28T15:32:23.901Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-28T15:32:23.901Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "PlayerMovement.cs",
               "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\PlayerMovement.cs",
               "RelativeDocumentMoniker": "Assets\\scripts\\PlayerMovement.cs",
@@ -55,7 +84,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "jump.cs",
               "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\jump.cs",
               "RelativeDocumentMoniker": "Assets\\jump.cs",
