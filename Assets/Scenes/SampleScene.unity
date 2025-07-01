@@ -758,7 +758,8 @@ MonoBehaviour:
   platformPrefab: {fileID: 942848435}
   leftWallPrefab: {fileID: 1282517681}
   rightWallPrefab: {fileID: 912806782}
-  poolSize: 10
+  platformPoolSize: 30
+  wallPoolSize: 6
 --- !u!4 &880311527
 Transform:
   m_ObjectHideFlags: 0
@@ -933,13 +934,12 @@ MonoBehaviour:
   rightWallPrefab: {fileID: 912806782}
   player: {fileID: 377815727}
   platformDistance: 4
-  initialPlatforms: 9
-  centerY: 0
+  initialPlatforms: 30
   wallLeftX: 14.4
   wallRightX: -14.4
   wallSegmentHeight: 16
   pool: {fileID: 0}
-  maxPlatforms: 20
+  maxPlatforms: 30
 --- !u!251 &942848441
 PlatformEffector2D:
   m_ObjectHideFlags: 0

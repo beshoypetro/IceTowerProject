@@ -6,7 +6,9 @@ public class ObjectPool : MonoBehaviour
     public GameObject platformPrefab;
     public GameObject leftWallPrefab;
     public GameObject rightWallPrefab;
-    public int poolSize = 10;
+
+    public int platformPoolSize = 30;
+    public int wallPoolSize = 6; // 3 left + 3 right (or more if needed)
 
     private List<GameObject> pooledPlatforms = new List<GameObject>();
     private List<GameObject> pooledLeftWalls = new List<GameObject>();
@@ -14,25 +16,22 @@ public class ObjectPool : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < poolSize; i++)
+        for (int i = 0; i < platformPoolSize; i++)
         {
             GameObject obj = Instantiate(platformPrefab);
             obj.SetActive(false);
             pooledPlatforms.Add(obj);
         }
 
-        for (int i = 0; i < poolSize/5; i++)
+        for (int i = 0; i < wallPoolSize; i++)
         {
-            GameObject obj = Instantiate(leftWallPrefab);
-            obj.SetActive(false);
-            pooledLeftWalls.Add(obj);
-        }
+            GameObject left = Instantiate(leftWallPrefab);
+            left.SetActive(false);
+            pooledLeftWalls.Add(left);
 
-        for (int i = 0; i < poolSize/5; i++)
-        {
-            GameObject obj = Instantiate(rightWallPrefab);
-            obj.SetActive(false);
-            pooledRightWalls.Add(obj);
+            GameObject right = Instantiate(rightWallPrefab);
+            right.SetActive(false);
+            pooledRightWalls.Add(right);
         }
     }
 
@@ -55,10 +54,9 @@ public class ObjectPool : MonoBehaviour
             }
         }
 
-        return null; // Return null if no inactive object is available
+        return null;
     }
 
-    // Public method to access pooled objects
     public List<GameObject> GetPooledObjects(string type)
     {
         if (type == "Platform") return pooledPlatforms;

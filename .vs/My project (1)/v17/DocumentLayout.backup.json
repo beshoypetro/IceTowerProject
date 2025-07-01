@@ -1,0 +1,100 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\beshoy\\My project (1)\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|c:\\users\\beshoy\\my project (1)\\assets\\scripts\\platformspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\platformspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|C:\\Users\\beshoy\\My project (1)\\assets\\scripts\\objectpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\objectpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|C:\\Users\\beshoy\\My project (1)\\assets\\scripts\\cameramove.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\cameramove.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|C:\\Users\\beshoy\\My project (1)\\assets\\scripts\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1CE1FEE-67BE-6533-73AA-CC578BE80DCD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\beshoy\\My project (1)\\Assets\\jump.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\jump.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ObjectPool.cs",
+              "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\ObjectPool.cs",
+              "RelativeDocumentMoniker": "Assets\\scripts\\ObjectPool.cs",
+              "ToolTip": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\ObjectPool.cs",
+              "RelativeToolTip": "Assets\\scripts\\ObjectPool.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-01T14:27:21.93Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PlatformSpawner.cs",
+              "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\PlatformSpawner.cs",
+              "RelativeDocumentMoniker": "Assets\\scripts\\PlatformSpawner.cs",
+              "ToolTip": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\PlatformSpawner.cs",
+              "RelativeToolTip": "Assets\\scripts\\PlatformSpawner.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAwwF8AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-01T01:28:53.015Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "cameraMove.cs",
+              "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\cameraMove.cs",
+              "RelativeDocumentMoniker": "Assets\\scripts\\cameraMove.cs",
+              "ToolTip": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\cameraMove.cs",
+              "RelativeToolTip": "Assets\\scripts\\cameraMove.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-28T15:32:23.901Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PlayerMovement.cs",
+              "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\PlayerMovement.cs",
+              "RelativeDocumentMoniker": "Assets\\scripts\\PlayerMovement.cs",
+              "ToolTip": "C:\\Users\\beshoy\\My project (1)\\Assets\\scripts\\PlayerMovement.cs",
+              "RelativeToolTip": "Assets\\scripts\\PlayerMovement.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAwwBMAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T12:46:38.61Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "jump.cs",
+              "DocumentMoniker": "C:\\Users\\beshoy\\My project (1)\\Assets\\jump.cs",
+              "RelativeDocumentMoniker": "Assets\\jump.cs",
+              "ToolTip": "C:\\Users\\beshoy\\My project (1)\\Assets\\jump.cs",
+              "RelativeToolTip": "Assets\\jump.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-09T21:42:34.148Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class PlatformSpawner : MonoBehaviour
 {
@@ -6,9 +7,8 @@ public class PlatformSpawner : MonoBehaviour
     public GameObject leftWallPrefab;
     public GameObject rightWallPrefab;
     public Transform player;
-    public float platformDistance = 4f;
-    public int initialPlatforms = 8;
-    public float centerY;
+    public float platformDistance = 2f;
+    public int initialPlatforms = 20;
     public float wallLeftX = -14.4f;
     public float wallRightX = 14.4f;
     public float wallSegmentHeight = 16f;
@@ -16,14 +16,22 @@ public class PlatformSpawner : MonoBehaviour
     public int maxPlatforms = 20;
 
     private float nextPlatformSpawnY;
-    private float nextWallSpawnY;
+    private float centerY;
     private bool hasReachedCenter = false;
     private float lastXPosition;
     private int currentPlatformCount = 0;
+    private Camera mainCam;
 
+    private float topWallY;
+    private int initialWallSegments = 3;
+
+    private HashSet<float> activePlatformYPositions = new HashSet<float>();
+
+    [System.Obsolete]
     void Start()
     {
         pool = FindObjectOfType<ObjectPool>();
+        mainCam = Camera.main;
 
         if (pool == null)
         {
@@ -31,12 +39,20 @@ public class PlatformSpawner : MonoBehaviour
             return;
         }
 
-        nextWallSpawnY = wallSegmentHeight;
-        nextPlatformSpawnY = centerY - platformDistance;
-        Debug.Log("Initial nextPlatformSpawnY: " + nextPlatformSpawnY);
+        centerY = mainCam.transform.position.y;
+        float bottomY = centerY;
+        nextPlatformSpawnY = bottomY - mainCam.orthographicSize;
+
+        lastXPosition = Random.Range(wallLeftX + 2f, wallRightX - 2f);
+        topWallY = bottomY;
+
+        for (int i = 0; i < initialWallSegments; i++)
+        {
+            SpawnWallSegmentAt(topWallY);
+            topWallY += wallSegmentHeight;
+        }
 
         PreGeneratePlatforms();
-        SpawnWallSegments();
     }
 
     void Update()
@@ -46,161 +62,166 @@ public class PlatformSpawner : MonoBehaviour
             hasReachedCenter = true;
         }
 
-        // Spawn platforms when the player is near the next platform spawn position
-    if (hasReachedCenter && player.position.y >= nextPlatformSpawnY - Camera.main.orthographicSize)
-    {
-        for (int i = 0; i < 3; i++)
+        if (hasReachedCenter && player.position.y >= nextPlatformSpawnY - mainCam.orthographicSize)
         {
-            SpawnPlatform();
-        }
-    }
-
-        // Spawn walls when the player is near the next wall spawn position
-        if (player.position.y >= nextWallSpawnY - Camera.main.orthographicSize - 3)
-        {
-
-
-                Debug.Log("player" + player.position.y + "  next wall " + nextWallSpawnY + "  camera   " + Camera.main.orthographicSize);
-                SpawnWallSegments();
+            for (int i = 0; i < 3; i++)
+            {
+                SpawnPlatform(nextPlatformSpawnY);
+                nextPlatformSpawnY += platformDistance;
+            }
         }
 
         RecyclePlatforms();
-        RecycleWalls(); // Ensure walls are also recycled in the update loop.
+        RecycleWalls();
     }
 
     void PreGeneratePlatforms()
     {
         for (int i = 0; i < initialPlatforms; i++)
         {
-            SpawnPlatform();
-            SpawnWallSegments();
+            SpawnPlatform(nextPlatformSpawnY);
+            nextPlatformSpawnY += platformDistance;
+        }
+
+        Debug.Log("Pre-generated platform Y positions:");
+        foreach (var y in activePlatformYPositions)
+        {
+            Debug.Log($"Platform at Y: {y}");
         }
     }
 
-    void SpawnPlatform()
+    void SpawnPlatform(float spawnY)
     {
         if (currentPlatformCount >= maxPlatforms)
+            return;
+
+        float roundedY = Mathf.Round(spawnY * 100f) / 100f;
+        if (activePlatformYPositions.Contains(roundedY))
         {
+            Debug.LogWarning($"Skipped spawning: Y {roundedY} already used.");
             return;
         }
 
         float x;
         const float wallOffset = 3.78f;
+        const float minHorizontalSpacing = 2.0f;
+        int maxAttempts = 10;
+        int attempts = 0;
 
-        x = Random.Range(wallLeftX - wallOffset, wallRightX + wallOffset);
+        do
+        {
+            x = Random.Range(wallLeftX - wallOffset, wallRightX + wallOffset);
+            attempts++;
+        } while (Mathf.Abs(x - lastXPosition) < minHorizontalSpacing && attempts < maxAttempts);
+
+        if (attempts >= maxAttempts)
+        {
+            x = lastXPosition + minHorizontalSpacing * (Random.value > 0.5f ? 1 : -1);
+            x = Mathf.Clamp(x, wallLeftX - wallOffset, wallRightX + wallOffset);
+        }
+
         lastXPosition = x;
-        Vector3 spawnPosition;
-        if (player.position.y >= centerY + 10f) // Example condition, you can adjust the threshold as needed
-        {
-            spawnPosition = new Vector3(x, player.position.y + Camera.main.orthographicSize + platformDistance, 0f);
-        }
-        else
-        {
-            spawnPosition = new Vector3(x, nextPlatformSpawnY, 0f);
-        }
 
         GameObject platform = pool.GetPooledObject("Platform");
         if (platform != null)
         {
-            platform.transform.position = spawnPosition;
+            platform.transform.position = new Vector3(x, roundedY, 0f);
             platform.SetActive(true);
-            Debug.Log("Platform spawned at: " + spawnPosition);
-
-            nextPlatformSpawnY += platformDistance;
             currentPlatformCount++;
-            Debug.Log("Next platform Y after increment: " + nextPlatformSpawnY + " (Count: " + currentPlatformCount + ")");
+            activePlatformYPositions.Add(roundedY);
+            Debug.Log($"Platform spawned at Y: {roundedY}, X: {x}");
         }
-        else
-        {
-            Debug.LogWarning("No inactive Platform objects available in the pool.");
-            return;
-        }
+
+        Debug.Log($"Trying to spawn at Y: {spawnY}, Rounded: {roundedY}, Already exists: {activePlatformYPositions.Contains(roundedY)}");
     }
 
-    void SpawnWallSegments()
+    void SpawnWallSegmentAt(float y)
     {
-
-        if (pool == null)
-        {
-            Debug.LogError("ObjectPool component not assigned.");
-            return;
-        }
-
-        Vector3 leftWallPosition = new Vector3(wallLeftX, nextWallSpawnY, 3.5f);
+        Vector3 leftWallPosition = new Vector3(wallLeftX, y, 3.5f);
         GameObject leftWall = pool.GetPooledObject("LeftWall");
         if (leftWall != null)
         {
             leftWall.transform.position = leftWallPosition;
             leftWall.SetActive(true);
-            //nextWallSpawnY += wallSegmentHeight / 2;
-            Debug.LogWarning("left checking walls  " + nextWallSpawnY);
         }
         else
         {
-            Debug.LogWarning("No inactive LeftWall objects available in the pool.");
+            Debug.LogWarning("No available LeftWall in pool!");
         }
 
-        Vector3 rightWallPosition = new Vector3(wallRightX, nextWallSpawnY, 3.5f);
+        Vector3 rightWallPosition = new Vector3(wallRightX, y, 3.5f);
         GameObject rightWall = pool.GetPooledObject("RightWall");
         if (rightWall != null)
         {
             rightWall.transform.position = rightWallPosition;
             rightWall.SetActive(true);
-            nextWallSpawnY += (wallSegmentHeight) ;
-            Debug.LogWarning("right  " + nextWallSpawnY);
         }
         else
         {
-            Debug.LogWarning("No inactive RightWall objects available in the pool.");
+            Debug.LogWarning("No available RightWall in pool!");
         }
-
-
     }
 
     void RecyclePlatforms()
     {
         foreach (GameObject platform in pool.GetPooledObjects("Platform"))
         {
-            if (platform.activeInHierarchy && platform.transform.position.y < player.position.y - Camera.main.orthographicSize * 2)
+            if (platform.activeInHierarchy && platform.transform.position.y < player.position.y - mainCam.orthographicSize + 1)
             {
+                float y = Mathf.Round(platform.transform.position.y * 100f) / 100f;
                 platform.SetActive(false);
                 currentPlatformCount--;
+                activePlatformYPositions.Remove(y);
+
+                SpawnPlatform(nextPlatformSpawnY);
+                nextPlatformSpawnY += platformDistance;
             }
         }
     }
 
     void RecycleWalls()
     {
-        float spawnYAbovePlayer = player.position.y + Camera.main.orthographicSize * 2;
-
-
         foreach (GameObject leftWall in pool.GetPooledObjects("LeftWall"))
         {
-            Debug.Log("Left wall recycled and spawned at: " + spawnYAbovePlayer + "  " + Camera.main.orthographicSize + "   " + (player.position.y - Camera.main.orthographicSize * 2) + "  " + leftWall.transform.position.y);
-
-            if (leftWall.activeInHierarchy && leftWall.transform.position.y < player.position.y - Camera.main.orthographicSize -3 )
+            if (leftWall.activeInHierarchy && player.position.y > leftWall.transform.position.y + wallSegmentHeight)
             {
+                float oldY = leftWall.transform.position.y;
+
                 leftWall.SetActive(false);
-                Vector3 spawnPosition = new Vector3(leftWall.transform.position.x, spawnYAbovePlayer+4, leftWall.transform.position.z);
-                leftWall.transform.position = spawnPosition;
+                leftWall.transform.position = new Vector3(wallLeftX, topWallY, 3.5f);
                 leftWall.SetActive(true);
-                Debug.Log("Left wall recycled and spawned at: " + spawnPosition);
-            }
-        }
 
-        foreach (GameObject rightWall in pool.GetPooledObjects("RightWall"))
-        {
-            if (rightWall.activeInHierarchy && rightWall.transform.position.y < player.position.y - Camera.main.orthographicSize -3 )
-            {
-                rightWall.SetActive(false);
-                Vector3 spawnPosition = new Vector3(rightWall.transform.position.x, spawnYAbovePlayer+4, rightWall.transform.position.z);
-                rightWall.transform.position = spawnPosition;
-                rightWall.SetActive(true);
-                Debug.Log("Right wall recycled and spawned at: " + spawnPosition);
+                GameObject rightWall = FindMatchingRightWall(oldY);
+                if (rightWall != null)
+                {
+                    rightWall.SetActive(false);
+                    rightWall.transform.position = new Vector3(wallRightX, topWallY, 3.5f);
+                    rightWall.SetActive(true);
+                }
+
+                topWallY += wallSegmentHeight;
             }
         }
     }
 
+    GameObject FindMatchingRightWall(float y)
+    {
+        foreach (GameObject rightWall in pool.GetPooledObjects("RightWall"))
+        {
+            if (rightWall.activeInHierarchy && Mathf.Approximately(rightWall.transform.position.y, y))
+            {
+                return rightWall;
+            }
+        }
+        return null;
+    }
 
-
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        foreach (var y in activePlatformYPositions)
+        {
+            Gizmos.DrawLine(new Vector3(-20, y, 0), new Vector3(20, y, 0));
+        }
+    }
 }
