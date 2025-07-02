@@ -8,7 +8,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float pushForce = 100f;
     [SerializeField] float linearDamping = 0.95f;
     [SerializeField] float maxVelocity = 5f;
-    float jumpPower = 9.5f;
+    [SerializeField] float jumpPower = 20f;
+    [SerializeField] float jumpPowerMultiplier = 1.1f;
     bool isGrounded = false;
 
     Rigidbody2D rb;
@@ -27,7 +28,9 @@ public class PlayerMovement : MonoBehaviour
         
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+            float speedFactor = Mathf.Abs(rb.linearVelocity.x);
+            float dynamicJumpPower = jumpPower + speedFactor * jumpPowerMultiplier;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, dynamicJumpPower);
             isGrounded = false;
             animator.SetBool("isJumping", !isGrounded);
         }
@@ -81,6 +84,10 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = true;
         animator.SetBool("isJumping", !isGrounded);
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            ScoreManager.Instance.PlayerLandedOnPlatform(collision.transform.position.y);
+        }
     }
     
     
