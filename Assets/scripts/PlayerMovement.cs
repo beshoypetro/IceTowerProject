@@ -4,13 +4,15 @@ using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
-    float horizontalInput;
+    private float _horizontalInput;
     [SerializeField] float pushForce = 100f;
     [SerializeField] float linearDamping = 0.95f;
     [SerializeField] float maxVelocity = 5f;
     [SerializeField] float jumpPower = 20f;
     [SerializeField] float jumpPowerMultiplier = 1.1f;
-    bool isGrounded = false;
+    private bool _isGrounded = false;
+    [SerializeField] private float groundCheckDistance = 1.4f;
+     private LayerMask _groundLayer;
 
     Rigidbody2D rb;
     Animator animator;
@@ -19,23 +21,27 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        _groundLayer = LayerMask.GetMask("Ground");
+
         rb.freezeRotation = true;
         rb.linearDamping = linearDamping;
     }
 
     void Update()
     {
+        CheckIsGrounded();
         
-        if (Input.GetButtonDown("Jump") && isGrounded)
+
+        
+        if (Input.GetButtonDown("Jump") && _isGrounded)
         {
             float speedFactor = Mathf.Abs(rb.linearVelocity.x);
             float dynamicJumpPower = jumpPower + speedFactor * jumpPowerMultiplier;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, dynamicJumpPower);
-            isGrounded = false;
-            animator.SetBool("isJumping", !isGrounded);
+            animator.SetBool("isJumping", !_isGrounded);
         }
         
-        horizontalInput = Input.GetAxis("Horizontal");
+        _horizontalInput = Input.GetAxis("Horizontal");
         
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -50,9 +56,9 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         
-        if (horizontalInput != 0)
+        if (_horizontalInput != 0)
         {
-            rb.AddForce(new Vector2(horizontalInput * pushForce, 0), ForceMode2D.Force);
+            rb.AddForce(new Vector2(_horizontalInput * pushForce, 0), ForceMode2D.Force);
         }
 
      
@@ -89,13 +95,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        isGrounded = true;
-        animator.SetBool("isJumping", !isGrounded);
+        animator.SetBool("isJumping", !_isGrounded);
         if (collision.gameObject.CompareTag("Platform"))
         {
             ScoreManager.Instance.PlayerLandedOnPlatform(collision.transform.position.y);
         }
     }
-    
-    
+
+    private void CheckIsGrounded()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, _groundLayer);
+        _isGrounded = hit.collider != null;
+    }
+
+
 }
