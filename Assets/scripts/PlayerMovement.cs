@@ -59,7 +59,14 @@ public class PlayerMovement : MonoBehaviour
         if (rb.linearVelocity.magnitude > maxVelocity)
         {
            
-            rb.linearVelocity = rb.linearVelocity.normalized * maxVelocity;
+            Vector2 vel = rb.linearVelocity;
+
+            // Clamp only horizontal movement, leave vertical untouched
+            if (Mathf.Abs(vel.x) > maxVelocity)
+            {
+                vel.x = Mathf.Sign(vel.x) * maxVelocity;
+                rb.linearVelocity = new Vector2(vel.x, vel.y);
+            }
         }
 
         animator.SetFloat("xVelocity", Math.Abs(rb.linearVelocity.x));
