@@ -5,7 +5,7 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
     private int score = 0;
-    private float lastPlatformY = float.MinValue;
+    private float highestYReached = float.MinValue;
     [SerializeField] private float platformDistance = 4f; // Set this to your platform spacing
 
     private void Awake()
@@ -23,17 +23,15 @@ public class ScoreManager : MonoBehaviour
 
     public void PlayerLandedOnPlatform(float platformY)
     {
-        if (lastPlatformY == float.MinValue)
+        if (platformY > highestYReached)
         {
-            lastPlatformY = platformY;
-            return;
-        }
-        if (platformY - lastPlatformY >= platformDistance)
-        {
-            score++;
-            lastPlatformY = platformY;
-            gameObject.GetComponent<TextMeshProUGUI>().text = score.ToString();
-
+            highestYReached = platformY;
+            int newScore = Mathf.FloorToInt(highestYReached / platformDistance);
+            if (newScore > score)
+            {
+                score = newScore;
+                gameObject.GetComponent<TextMeshProUGUI>().SetText(score.ToString());
+            }
         }
     }
 
