@@ -5,10 +5,10 @@ using UnityEngine.Serialization;
 public class PlayerMovement : MonoBehaviour
 {
     private float _horizontalInput;
-    [SerializeField] float pushForce = 100f;
-    [SerializeField] float linearDamping = 0.95f;
-    [SerializeField] float maxVelocity = 5f;
-    [SerializeField] float jumpPower = 20f;
+    [SerializeField] float pushForce = 500f;
+    [SerializeField] float linearDamping = 5f;
+    [SerializeField] float maxVelocity = 40f;
+    [SerializeField] float jumpPower = 30f;
     [SerializeField] float jumpPowerMultiplier = 1.1f;
     private bool _isGrounded = false;
     [SerializeField] private float groundCheckDistance = 1.4f;
@@ -104,8 +104,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, _groundLayer);
-        _isGrounded = hit.collider != null;
+        _isGrounded = true;
+        // RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, _groundLayer);
+        // _isGrounded = hit.collider != null;
     }
 
 

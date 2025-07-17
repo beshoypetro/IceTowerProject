@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &25153122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +151,9 @@ MonoBehaviour:
   platformPrefab: {fileID: 7262489679283025118, guid: 36a9821fe32366544bacd439f97cc810, type: 3}
   leftWallPrefab: {fileID: 4862424029417004016, guid: 3f39c81b722b666418193db471598736, type: 3}
   rightWallPrefab: {fileID: 4862424029417004016, guid: 3f39c81b722b666418193db471598736, type: 3}
+  platformStyle1Prefab: {fileID: 7262489679283025118, guid: 36a9821fe32366544bacd439f97cc810, type: 3}
+  platformStyle2Prefab: {fileID: 7262489679283025118, guid: 7c17d3cf324cb4cd49dfaeb379460275, type: 3}
+  platformStyle3Prefab: {fileID: 7262489679283025118, guid: 9bba4349a3cf74c3284382c089bc220f, type: 3}
   platformPoolSize: 30
   wallPoolSize: 6
 --- !u!4 &25153123
@@ -583,11 +586,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c8b04b62efb214b8464747b6360292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushForce: 300
-  linearDamping: 2
-  maxVelocity: 30
-  jumpPower: 30
+  pushForce: 500
+  linearDamping: 5
+  maxVelocity: 40
+  jumpPower: 60
   jumpPowerMultiplier: 1
+  groundCheckDistance: 1.4
 --- !u!50 &377815731
 Rigidbody2D:
   serializedVersion: 5
@@ -909,7 +913,7 @@ GameObject:
   - component: {fileID: 821843941}
   - component: {fileID: 821843940}
   - component: {fileID: 821843939}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1051,7 +1055,8 @@ GameObject:
   - component: {fileID: 942848441}
   - component: {fileID: 942848442}
   - component: {fileID: 942848439}
-  m_Layer: 0
+  - component: {fileID: 942848443}
+  m_Layer: 3
   m_Name: ground6
   m_TagString: Platform
   m_Icon: {fileID: 0}
@@ -1181,7 +1186,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942848435}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7cfd7b16468969448bf76264df6fb67b, type: 3}
   m_Name: 
@@ -1229,11 +1234,115 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitTime: 2
+--- !u!114 &942848443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942848435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb21bc3f2ccd472bad7513420786583f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pool: {fileID: 0}
+  player: {fileID: 377815727}
+  spawnYInterval: 2
+  recycleOffset: -10
 --- !u!1 &1282517681 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4862424029417004016, guid: 3f39c81b722b666418193db471598736, type: 3}
   m_PrefabInstance: {fileID: 1829376368}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1324006964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1324006967}
+  - component: {fileID: 1324006966}
+  - component: {fileID: 1324006965}
+  - component: {fileID: 1324006968}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1324006965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324006964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb21bc3f2ccd472bad7513420786583f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pool: {fileID: 1324006966}
+  player: {fileID: 377815727}
+  spawnYInterval: 2
+  recycleOffset: -10
+--- !u!114 &1324006966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324006964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a10754791b3942f2bdcb7a33d01c1c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformPrefabs:
+  - {fileID: 7262489679283025118, guid: 36a9821fe32366544bacd439f97cc810, type: 3}
+  - {fileID: 7262489679283025118, guid: 7c17d3cf324cb4cd49dfaeb379460275, type: 3}
+  - {fileID: 7262489679283025118, guid: 9bba4349a3cf74c3284382c089bc220f, type: 3}
+  - {fileID: 7262489679283025118, guid: 8f03674503265406eb46ab8bae15650e, type: 3}
+--- !u!4 &1324006967
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324006964}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.67029786, y: -3.8138857, z: 0.7678327}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1324006968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324006964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5173f90371934deb82b40e50d7ecaefc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftWallConfig:
+    prefab: {fileID: 0}
+    spawnPosition: {x: 0, y: 0}
+  rightWallConfig:
+    prefab: {fileID: 0}
+    spawnPosition: {x: 0, y: 0}
+  initialPoolSize: 20
+  wallSpacing: 5
+  spawnOffset: 5
 --- !u!1001 &1519559771
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1460,6 +1569,10 @@ PrefabInstance:
       value: ground6
       objectReference: {fileID: 0}
     - target: {fileID: 3435618722042047863, guid: 71750dd30aaeb8a45bdadb8107bdba38, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3435618722042047863, guid: 71750dd30aaeb8a45bdadb8107bdba38, type: 3}
       propertyPath: m_TagString
       value: Platform
       objectReference: {fileID: 0}
@@ -1525,3 +1638,4 @@ SceneRoots:
   - {fileID: 25153123}
   - {fileID: 147820410}
   - {fileID: 1647614616}
+  - {fileID: 1324006967}
