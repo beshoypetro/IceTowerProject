@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,10 +6,10 @@ public class PlatformObjectPool : MonoBehaviour
 {
     // Normal platform prefabs (cycle every 100 platforms)
     public List<GameObject> platformPrefabs;
-    
+
     // Special platform prefabs (change every 100 platforms)
     public List<GameObject> specialPlatformPrefabs;
-    
+
     private Dictionary<GameObject, Queue<GameObject>> _poolDictionary;
     private int _platformSpawnCount = 0;
     private int _currentSpecialIndex = 0;
@@ -22,7 +23,7 @@ public class PlatformObjectPool : MonoBehaviour
     {
         GameObject prefab = GetCurrentPrefab();
         Queue<GameObject> pool;
-        
+
         if (!_poolDictionary.TryGetValue(prefab, out pool))
         {
             pool = new Queue<GameObject>();
@@ -50,16 +51,16 @@ public class PlatformObjectPool : MonoBehaviour
     private GameObject GetCurrentPrefab()
     {
         // Special platforms every 50 platforms
-        if (IsSpecialPlatform(_platformSpawnCount))
+        if (IsSpecialPlatform(_platformSpawnCount) && ((specialPlatformPrefabs.Count * 100) - 10) > _platformSpawnCount)
         {
             // Update special index every 100 platforms
             _currentSpecialIndex = Mathf.FloorToInt(_platformSpawnCount / 100f) % specialPlatformPrefabs.Count;
-            
+
             return specialPlatformPrefabs[_currentSpecialIndex];
         }
-        
+
         // Normal platforms cycle every 100 platforms
-        int prefabIndex = (_platformSpawnCount / 100) % platformPrefabs.Count;
+        int prefabIndex = Math.Min(_platformSpawnCount / 100, platformPrefabs.Count - 1);
         return platformPrefabs[prefabIndex];
     }
 
