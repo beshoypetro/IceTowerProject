@@ -16,9 +16,9 @@ public class WallObjectPool : MonoBehaviour
     public float wallSpacing = 10f;
     public float spawnOffset = 5f;
 
-    private Dictionary<WallConfig, Queue<GameObject>> _wallPools = 
+    private Dictionary<WallConfig, Queue<GameObject>> _wallPools =
         new Dictionary<WallConfig, Queue<GameObject>>();
-    
+
     private Transform _player;
     private float _nextSpawnY;
 
@@ -31,6 +31,7 @@ public class WallObjectPool : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.isGameOver()) return;
         if (_player.position.y > _nextSpawnY - spawnOffset)
         {
             SpawnWallPair();
@@ -72,7 +73,7 @@ public class WallObjectPool : MonoBehaviour
     private void SpawnWall(WallConfig config)
     {
         Queue<GameObject> pool = _wallPools[config];
-        
+
         if (pool.Count == 0)
         {
             AddToPool(config);
@@ -89,7 +90,7 @@ public class WallObjectPool : MonoBehaviour
     public void ReturnWallToPool(GameObject wall)
     {
         wall.SetActive(false);
-        
+
         // Find which pool this wall belongs to
         foreach (var kvp in _wallPools)
         {
@@ -99,7 +100,7 @@ public class WallObjectPool : MonoBehaviour
                 return;
             }
         }
-        
+
         // If not found in any pool, destroy it
         Destroy(wall);
     }

@@ -81,6 +81,7 @@
     <Compile Include="Assets/scripts/WallObjectPool.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/CameraController.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark03.cs" />
+    <Compile Include="Assets/scripts/PlayerFallDetector.cs" />
     <Compile Include="Assets/scripts/PlatformObjectPool.cs" />
     <Compile Include="Assets/scripts/GameManager.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/DropdownSample.cs" />
