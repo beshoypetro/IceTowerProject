@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _isGrounded = false;
     [SerializeField] private float groundCheckDistance = 1.4f;
      private LayerMask _groundLayer;
+     private SoundManager _soundManager;
 
     Rigidbody2D rb;
     Animator animator;
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        _soundManager = GetComponent<SoundManager>();
         _groundLayer = LayerMask.GetMask("Ground");
 
         rb.freezeRotation = true;
@@ -39,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
             float dynamicJumpPower = jumpPower + speedFactor * jumpPowerMultiplier;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, dynamicJumpPower);
             animator.SetBool("isJumping", !_isGrounded);
+            _soundManager.Jump();
         }
         
         _horizontalInput = Input.GetAxis("Horizontal");
